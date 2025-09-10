@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -48,7 +49,9 @@ const formSchema = z.object({
 });
 
 function TokenLaunchpad() {
-  const umi = createUmi(process.env.RPC_URL!).use(mplCandyMachine());
+  const umi = createUmi(process.env.NEXT_PUBLIC_RPC_URL!).use(
+    mplCandyMachine()
+  );
 
   const wallet = useWallet();
 
@@ -70,6 +73,13 @@ function TokenLaunchpad() {
       uri: values.imageUri,
     };
 
+    if (!wallet.connected || !wallet.publicKey) {
+      toast("Wallet not connected", {
+        description: "Please connect your wallet first.",
+      });
+      return; // make sure to exit the function
+    }
+
     umi.use(walletAdapterIdentity(wallet));
     umi.use(mplTokenMetadata());
 
@@ -89,12 +99,25 @@ function TokenLaunchpad() {
           ? publicKey(wallet.publicKey.toBase58())
           : undefined,
         tokenStandard: TokenStandard.Fungible,
-        updateAuthority: umi.identity
+        updateAuthority: umi.identity,
       }).sendAndConfirm(umi);
 
-      console.log("Successfully minted tokens. Mint address:", mint.publicKey);
+      toast("Successfully minted tokens. Mint address:", {
+        description: (
+          <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
+            <code className="text-white">{mint.publicKey.toString()}</code>
+          </pre>
+        ),
+      });
     } catch (err) {
       console.error("Error minting tokens:", err);
+      toast("Token creation failed", {
+        description: (
+          <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
+            <code className="text-white">Please try again later.</code>
+          </pre>
+        ),
+      });
     }
   }
 
