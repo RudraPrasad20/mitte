@@ -122,9 +122,12 @@ function TokenLaunchpad() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6 w-full max-w-sm sm:max-w-md md:max-w-lg mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(createToken)} className="space-y-8">
+        <form
+          onSubmit={form.handleSubmit(createToken)}
+          className="space-y-6 sm:space-y-8"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -190,7 +193,12 @@ function TokenLaunchpad() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button
+            type="submit"
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 text-base sm:text-lg"
+          >
+            Submit
+          </Button>
         </form>
       </Form>
     </div>
