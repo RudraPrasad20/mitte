@@ -74,9 +74,7 @@ function TokenLaunchpad() {
     };
 
     if (!wallet.connected || !wallet.publicKey) {
-      toast("Wallet not connected", {
-        description: "Please connect your wallet first.",
-      });
+      toast("Wallet not connected, Please connect your wallet first");
       return; // make sure to exit the function
     }
 
@@ -102,22 +100,10 @@ function TokenLaunchpad() {
         updateAuthority: umi.identity,
       }).sendAndConfirm(umi);
 
-      toast("Successfully minted tokens. Mint address:", {
-        description: (
-          <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-            <code className="text-white">{mint.publicKey.toString()}</code>
-          </pre>
-        ),
-      });
+      toast(`Successfully minted tokens. Mint address: ${mint.publicKey.toString()}`);
     } catch (err) {
       console.error("Error minting tokens:", err);
-      toast("Token creation failed", {
-        description: (
-          <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-            <code className="text-white">Please try again later.</code>
-          </pre>
-        ),
-      });
+      toast("Token creation failed, Please try again later.");
     }
   }
 

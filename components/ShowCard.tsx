@@ -15,7 +15,7 @@ const ShowCard = () => {
           Create Your Token
         </CardTitle>
         <CardDescription className="text-sm sm:text-base text-muted-foreground">
-          Just connect your wallet and create — launch your cryptocurrency in
+          launch your cryptocurrency in
           minutes, fast and secure.
         </CardDescription>
       </CardHeader>
