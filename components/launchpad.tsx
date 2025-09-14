@@ -49,6 +49,7 @@ const formSchema = z.object({
 });
 
 function TokenLaunchpad() {
+  const { connected } = useWallet();
   const umi = createUmi(process.env.NEXT_PUBLIC_RPC_URL!).use(
     mplCandyMachine()
   );
@@ -66,17 +67,12 @@ function TokenLaunchpad() {
     },
   });
 
-  async function createToken(values: z.infer<typeof formSchema>) {
+  async function createToken(values: z.infer<typeof formSchema>) { 
     const metadata = {
       name: values.name,
       symbol: values.symbol,
       uri: values.imageUri,
     };
-
-    if (!wallet.connected || !wallet.publicKey) {
-      toast("Wallet not connected, Please connect your wallet first");
-      return; // make sure to exit the function
-    }
 
     umi.use(walletAdapterIdentity(wallet));
     umi.use(mplTokenMetadata());
@@ -181,9 +177,10 @@ function TokenLaunchpad() {
           />
           <Button
             type="submit"
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 text-base sm:text-lg"
+            className="w-full cursor-pointer bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 text-base sm:text-lg"
+            disabled={!wallet.publicKey}
           >
-            Submit
+             {connected ? "Submit" : "Connect Wallet to Create"}
           </Button>
         </form>
       </Form>

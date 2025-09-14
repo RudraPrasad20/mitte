@@ -13,7 +13,6 @@ export default function Home() {
               Just connect your wallet and create
             </p>
           </div>
-
           <TokenCreationCard />
         </div>
       </main>
